@@ -8,9 +8,83 @@
 <body>
 <div class="loader">loading...</div>
 <div class="content invisible">helloooooooo</div>
-<div>Hi Li</div>
+<div id="allMovies"></div>
+<main id="mainPage"></main>
+<button type="button" id="deleteButton"></button>
 
+<script src="keys.js"></script>
+<script src="http://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+<script>
+// id > title, genres[] , overview , popularity , poster_path
 
+    let movieId = prompt('id#');
+
+    const getTheMovie = $.get(`https://api.themoviedb.org/3/movie/${movieId}?api_key=`+APIKEY).done(function (data,status,jqXhr){
+        let poster = data.poster_path;
+        addMovie(data);
+        $('#mainPage').append(`
+        <img src="https://image.tmdb.org/t/p/original/${poster}">
+        `)
+    })
+
+const addMovie = (data) => fetch('https://synonymous-evening-millennium.glitch.me/movies', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+})
+    .then(res => res.json())
+    .then(data => {
+        console.log(`Success: created ${JSON.stringify(data)}`);
+        return data.id; // to access the primary key of the newly created entity
+    })
+    .catch(console.error);
+
+        $(document).ready(function () {
+            let loader = document.querySelector('.loader');
+            let content = document.querySelector('.content');
+            window.addEventListener('load', () => {
+                loader.style.display = 'none';
+                content.classList.remove('invisible');
+            });
+
+            var movieUrl = 'https://synonymous-evening-millennium.glitch.me/movies'
+
+            const getMovies = () => fetch(movieUrl)
+                .then(res => res.json())
+                .catch(err => console.error(err));
+
+            console.log(getMovies());
+
+            getMovies().then(movies => {
+                console.log(movies);
+                movies.forEach(movie => renderMovie(movie));
+                loader.style.display = 'none';
+                content.classList.remove('invisible');
+            })
+
+            function renderMovie(movie) {
+                $('#allMovies').append(
+                    `<div>Movie Title: ${movie.title} </div>
+                <div>Rating: ${movie.rating}</div>`
+                )
+            }
+
+            // const deleteMovie = id => fetch(`${movieUrl}/${id}`, {
+            //     method: 'DELETE',
+            //     headers: {
+            //         'Content-Type': 'application/json'
+            //     }
+            // })
+            //     .then(res => res.json())
+            //     .then(() => {
+            //         console.log(`Success: deleted dog with id of ${id}`);
+            //     })
+            //     .catch(console.error);
+        })
+
+</script>
 <script src="script.js"></script>
 </body>
 </html>
