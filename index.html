@@ -7,82 +7,129 @@
 </head>
 <body>
 <div class="loader">loading...</div>
-<div class="content invisible">helloooooooo</div>
-<div id="allMovies"></div>
-<main id="mainPage"></main>
-<button type="button" id="deleteButton"></button>
+<div class="content invisible">
+    <div id="allMovies"></div>
+    <main id="mainPage"></main>
+    <button type="button" id="deleteButton">Delete All Movies</button>
+    <form id="add-movie">
+        <input type="text" placeholder="title">
+        <select name="genre">
+            <h2>Add a new movie here:</h2>
+            <option value="">Action</option>
+            <option value="">Animation</option>
+            <option value="">Comedy</option>
+            <option value="">Crime</option>
+            <option value="">Drama</option>
+            <option value="">Fantasy</option>
+            <option value="">Horror</option>
+            <option value="">Mystery</option>
+            <option value="">Romance</option>
+            <option value="">Thriller</option>
+        </select>
+        <p>
+            <i class="star fa fa-star checked" data-value="1"></i>
+            <i class="star fa fa-star checked" data-value="2"></i>
+            <i class="star fa fa-star checked" data-value="3"></i>
+            <i class="star fa fa-star checked" data-value="4"></i>
+            <i class="star fa fa-star checked" data-value="5"></i>
+        </p>
+        <p>You are hovering star number: <span id="review-result"></span></p>
+        <input type="submit">
+    </form>
+
+</div>
+
 
 <script src="keys.js"></script>
-<script src="http://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+<script src="http://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+        crossorigin="anonymous"></script>
 <script>
+    'use strict';
+    $(document).ready(function () {
 // id > title, genres[] , overview , popularity , poster_path
 
-    let movieId = prompt('id#');
+        let movieId = prompt('id#');
 
-    const getTheMovie = $.get(`https://api.themoviedb.org/3/movie/${movieId}?api_key=`+APIKEY).done(function (data,status,jqXhr){
-        let poster = data.poster_path;
-        addMovie(data);
-        $('#mainPage').append(`
-        <img src="https://image.tmdb.org/t/p/original/${poster}">
-        `)
-    })
-
-const addMovie = (data) => fetch('https://synonymous-evening-millennium.glitch.me/movies', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(data)
-})
-    .then(res => res.json())
-    .then(data => {
-        console.log(`Success: created ${JSON.stringify(data)}`);
-        return data.id; // to access the primary key of the newly created entity
-    })
-    .catch(console.error);
-
-        $(document).ready(function () {
-            let loader = document.querySelector('.loader');
-            let content = document.querySelector('.content');
-            window.addEventListener('load', () => {
-                loader.style.display = 'none';
-                content.classList.remove('invisible');
-            });
-
-            var movieUrl = 'https://synonymous-evening-millennium.glitch.me/movies'
-
-            const getMovies = () => fetch(movieUrl)
-                .then(res => res.json())
-                .catch(err => console.error(err));
-
-            console.log(getMovies());
-
-            getMovies().then(movies => {
-                console.log(movies);
-                movies.forEach(movie => renderMovie(movie));
-                loader.style.display = 'none';
-                content.classList.remove('invisible');
-            })
-
-            function renderMovie(movie) {
-                $('#allMovies').append(
-                    `<div>Movie Title: ${movie.title} </div>
-                <div>Rating: ${movie.rating}</div>`
-                )
-            }
-
-            // const deleteMovie = id => fetch(`${movieUrl}/${id}`, {
-            //     method: 'DELETE',
-            //     headers: {
-            //         'Content-Type': 'application/json'
-            //     }
-            // })
-            //     .then(res => res.json())
-            //     .then(() => {
-            //         console.log(`Success: deleted dog with id of ${id}`);
-            //     })
-            //     .catch(console.error);
+        /// get movie from TMDB API
+        const getTheMovie = $.get(`https://api.themoviedb.org/3/movie/${movieId}?api_key=` + APIKEY).done(function (data, status, jqXhr) {
+            let poster = data.poster_path;
+            addMovie(data);
+            renderMovie(data);
+            // $('#mainPage').append(`       `)
         })
+
+        // render movies on DOM
+        function renderMovie(movie) {
+            $('#allMovies').append(
+                `<div>Movie Title: ${movie.title} </div>
+                <div>Rating: ${movie.rating}</div>
+                <img src="https://image.tmdb.org/t/p/original/${poster}">`
+            )
+        }
+
+        /// add a new movie
+        const addMovie = (data) => fetch(`${movieUrl}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+            .then(res => res.json())
+            .then(data => {
+                console.log(`Success: created ${JSON.stringify(data)}`);
+                return data.id; // to access the primary key of the newly created entity
+            })
+            .catch(console.error);
+
+        /// loader page manipulation
+        let loader = document.querySelector('.loader');
+        let content = document.querySelector('.content');
+        window.addEventListener('load', () => {
+            loader.style.display = 'none';
+            content.classList.remove('invisible');
+        });
+
+        var movieUrl = 'https://synonymous-evening-millennium.glitch.me/movies'
+
+        // get all movie from JSON server
+        const getMovies = () => fetch(`${movieUrl}`)
+            .then(res => res.json())
+            .catch(err => console.error(err));
+
+        // calling the getMovies function
+        getMovies().then(movies => {
+            console.log(movies);
+            movies.forEach(movie => renderMovie(movie));
+            loader.style.display = 'none';
+            content.classList.remove('invisible');
+        })
+
+
+        /// delete a movie
+        const deleteMovie = id => fetch(`${movieUrl}/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(res => res.json())
+            .then(() => {
+                console.log(`Success: deleted dog with id of ${id}`);
+            })
+            .catch(console.error);
+
+        const deleteAllBtn = document.getElementById('deleteButton');
+        deleteAllBtn.addEventListener('click', deleteAll);
+        function deleteAll() {
+            getMovies().then(movies => {
+                movies.forEach(movie => deleteMovie(movie.id));
+            })
+            getMovies().then(movies => {
+                movies.forEach(movie => renderMovie(movie));
+            })
+        }
+    })
 
 </script>
 <script src="script.js"></script>
