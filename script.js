@@ -12,6 +12,7 @@ function ready() {
     let deleteAllBtn = document.getElementById('delete-all-movie');
     let addBtn = document.getElementById('add-btn');
     let addMovieTitle = document.getElementById('add-movie-title');
+    let editMode = document.getElementById('editMode');
 
     const movieUrl = 'https://synonymous-evening-millennium.glitch.me/movies';
     const tmdbUrl = `https://api.themoviedb.org/3/movie/123?api_key=${APIKEY}&append_to_response=videos,images`;
@@ -47,17 +48,17 @@ function ready() {
 
     function renderMovie(movie) {
         let output = `
-                <div class="card">
-                    <div class="card-title">${movie.title}</div>
+                <div class="card col-3 m-3 text-center">
+                    <h2 class="card-title py-3" style="background-color: #262651">${movie.title}</h2>
                     <div class="card-body">
                         <img class="poster" src= "https://image.tmdb.org/t/p/w300/${movie.poster_path}" alt="movie poster">
                         <div>Rating: <span contenteditable="true">${movie.vote_average}</span></div>
                         <div>Genres: <span contenteditable="true">${movie.genres.reduce((acc, {name}) => acc += `${name} `, '')}</span></div>
                         <p class="plot">${movie.overview}</p>
                     </div>
-                    <div class="card-footer">
-                        <button class="delete-btn" id="${movie.id}">delete</button>                 
-                        <button class="edit-btn" data-id="${movie.id}">edit</button>                 
+                    <div class="card-footer invisibleBtn">
+                        <button class="delete-btn btn-lg btn-secondary" id="${movie.id}">delete</button>                 
+                        <button class="edit-btn btn-lg btn-secondary" data-id="${movie.id}">edit</button>                 
                     </div>
                 </div>`;
         renderDiv.innerHTML += output;
@@ -84,6 +85,7 @@ function ready() {
         addMovieTitle.value = '';
     })
 
+
     document.querySelector('body').addEventListener('click', function (e) {
         console.log(e.target);
         if (!e.target) {
@@ -94,6 +96,21 @@ function ready() {
             deleteMovie(e.target.getAttribute('id'));
         }
     });
+
+    $('#editMode').click(function (e){
+        console.log(e);
+        $('.card-footer').toggleClass('invisibleBtn')
+    })
+
+    document.querySelector('body').addEventListener('click', function (e) {
+        console.log(e.target);
+        console.log(document.activeElement);
+        if (!e.target) {
+            return;
+        }
+        if (e.target.matches('#editMode')) {
+        }})
+
 
     document.querySelector('body').addEventListener('click', function (e) {
         console.log(e.target);
