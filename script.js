@@ -65,7 +65,7 @@ function ready() {
                         <p>${movie.overview}</p>
                     </div>
                     <div class="card-footer">
-                        <button class="delete-btn">delete</button>                 
+                        <button class="delete-btn" id="${movie.id}">delete</button>                 
                         <button>edit</button>                 
                     </div>
                 </div>`;
@@ -93,24 +93,15 @@ function ready() {
         addMovieTitle.value = '';
     })
 
-
-
-// let deleteArr = Array.from(deleteBtn);
-// console.log(deleteArr);
-// for(let btn of deleteArr) {
-//     console.log(btn);
-//     btn.addEventListener('click', (e) => {
-//         e.preventDefault();
-//         console.log(e.target);
-//         console.log(e.currentTarget);
-//     })
-// }
-
-// deleteBtn.addEventListener('click', (e) => {
-//     e.preventDefault();
-//     console.log(e.target);
-//     console.log(e.currentTarget);
-// })
+    document.querySelector('body').addEventListener('click', function (e) {
+        console.log(e.target);
+        if (!e.target) {
+            return;
+        }
+        if (e.target.matches('.delete-btn')) {
+            e.target.closest('.card').remove();
+        }
+    });
 
     deleteAllBtn.addEventListener('click', (e) => {
         e.preventDefault();
