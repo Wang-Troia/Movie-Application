@@ -12,14 +12,8 @@ function ready() {
     let loader = document.querySelector('.loader');
     let content = document.querySelector('.content');
     let renderDiv = document.getElementById('renderMovie');
-    let deleteBtn = document.getElementsByClassName('delete-btn');
-    console.log(deleteBtn);
-    console.log(deleteBtn[0]);
-    let deleteBtn1 = document.querySelectorAll('.delete-btn');
-    console.log(deleteBtn1);
     let deleteAllBtn = document.getElementById('delete-all-movie');
     let addBtn = document.getElementById('add-btn');
-    let editBtn = document.getElementById('edit-btn');
     let addMovieTitle = document.getElementById('add-movie-title');
 
     const movieUrl = 'https://synonymous-evening-millennium.glitch.me/movies';
