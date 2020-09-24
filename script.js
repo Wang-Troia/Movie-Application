@@ -57,16 +57,16 @@ function ready() {
     function renderMovie(movie) {
         let output = `
                 <div class="card">
-                    <div class="card-title">Title: ${movie.title}</div>
+                    <div class="card-title">${movie.title}</div>
                     <div class="card-body">
                         <img class="poster" src= "https://image.tmdb.org/t/p/w300/${movie.poster_path}" alt="movie poster">
-                        <div>Rating: ${movie.vote_average}</div>
-                        <div>Genres: ${movie.genres.reduce((acc, {name}) => acc += `${name} `, '')}</div>
-                        <p>${movie.overview}</p>
+                        <div>Rating: <span contenteditable="true">${movie.vote_average}</span></div>
+                        <div>Genres: <span contenteditable="true">${movie.genres.reduce((acc, {name}) => acc += `${name} `, '')}</span></div>
+                        <p class="plot">${movie.overview}</p>
                     </div>
                     <div class="card-footer">
                         <button class="delete-btn" id="${movie.id}">delete</button>                 
-                        <button>edit</button>                 
+                        <button class="edit-btn" data-id="${movie.id}">edit</button>                 
                     </div>
                 </div>`;
         renderDiv.innerHTML += output;
@@ -100,6 +100,27 @@ function ready() {
         }
         if (e.target.matches('.delete-btn')) {
             e.target.closest('.card').remove();
+            deleteMovie(e.target.getAttribute('id'));
+        }
+    });
+
+    document.querySelector('body').addEventListener('click', function (e) {
+        console.log(e.target);
+        console.log(document.activeElement);
+        if (!e.target) {
+            return;
+        }
+        if (e.target.matches('.edit-btn')) {
+            console.log();
+            obj = {
+                id: e.target.getAttribute('data-id'),
+                vote_average: e.target.closest('.card').childNodes[3].childNodes[3].childNodes[1].innerText,
+                title: e.target.closest('.card').childNodes[1].innerText,
+                poster_path: e.target.closest('.card').childNodes[3].childNodes[1].getAttribute('src').slice(32),
+                overview: e.target.closest('.card').childNodes[3].childNodes[7].innerText,
+                genres: [{name: e.target.closest('.card').childNodes[3].childNodes[5].childNodes[1].innerText}]
+            };
+            editMovie(obj);
         }
     });
 

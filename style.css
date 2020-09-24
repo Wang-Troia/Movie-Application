@@ -42,13 +42,14 @@ nav {
     border: 1px solid dimgrey;
     height: 550px;
     width: 350px;
-    text-align: center;
+    /*text-align: center;*/
     border-radius: 10px;
     box-shadow:  5px 5px 5px rgba(230,230,230,0.3);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     margin: 10px;
+    padding: 10px;
     background-color: lightgrey;
 }
 
@@ -61,9 +62,15 @@ nav {
 }
 
 .poster {
-    height: 300px;
-    width: 200px;
+    height: 250px;
+    /*width: 200px;*/
+    justify-self: center;
     box-shadow: 5px 5px 5px rgba(0,0,0,0.5), -5px -1px 5px rgba(0,0,0,0.5);
+}
+
+.plot {
+    overflow-y: auto;
+    height: 120px;
 }
 
 form {
@@ -73,9 +80,7 @@ form {
     /*float: left;*/
 }
 
-.star {
-    cursor: pointer;
-    background-color: yellow;
-    color: white;
-}
+
+
+
 
