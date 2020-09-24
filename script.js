@@ -3,10 +3,7 @@ if (document.readyState === 'loading') {
 } else {
     ready();
 }
-// window.addEventListener('load', () => {
-//     loader.style.display = 'none';
-//     content.classList.remove('invisible');
-// });
+
 function ready() {
 
     let loader = document.querySelector('.loader');
