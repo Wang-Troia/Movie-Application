@@ -9,9 +9,10 @@
 <body>
 <div class="loader">loading...</div>
 <div class="content invisible">
-    <div id="renderMovie"></div>
+    <nav>Your personal movie Bin</nav>
     <form id="add-movie">
-        <input type="text" placeholder="title">
+        <h3>Add your movies here:</h3>
+        <input type="text" placeholder="title" id="add-movie-title">
         <select name="genre">
             <h2>Add a new movie here:</h2>
             <option value="">Action</option>
@@ -32,12 +33,21 @@
             <i class="star fa fa-star checked" data-value="4"></i>
             <i class="star fa fa-star checked" data-value="5"></i>
         </p>
-        <p>You are hovering star number: <span id="review-result"></span> </p>
-        <input type="submit">
+        <p>Your rating is: <span id="review-result"></span> </p>
+        <input type="submit" id="add-btn">
     </form>
+    <form id="edit-movie">
+        <h3>Edit movie:</h3>
+        <input type="text" placeholder="title">
+        <input type="submit" id="edit-btn">
+    </form>
+    <button id="delete-all-movie">Delete All Movies</button>
+    <br><br><br>
+    <div id="renderMovie"></div>
+
 </div>
 
-
+<script src="keys.js"></script>
 <script src="script.js"></script>
 </body>
 </html>
