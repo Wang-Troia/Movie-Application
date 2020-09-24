@@ -1,51 +1,61 @@
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', ready);
+} else {
+    ready();
+}
 // window.addEventListener('load', () => {
 //     loader.style.display = 'none';
 //     content.classList.remove('invisible');
 // });
-let loader = document.querySelector('.loader');
-let content = document.querySelector('.content');
-let renderDiv = document.getElementById('renderMovie');
-let deleteBtn = document.getElementsByClassName('delete-btn');
-console.log(deleteBtn);
-let deleteAllBtn = document.getElementById('delete-all-movie');
-let addBtn = document.getElementById('add-btn');
-let editBtn = document.getElementById('edit-btn');
-let addMovieTitle = document.getElementById('add-movie-title');
+function ready() {
 
-const movieUrl = 'https://synonymous-evening-millennium.glitch.me/movies';
-const tmdbUrl = `https://api.themoviedb.org/3/movie/123?api_key=${APIKEY}&append_to_response=videos,images`;
-const tmdbSearchUrl = `https://api.themoviedb.org/3/search/movie?api_key=${APIKEY}&query=Jack+Reacher`;
+    let loader = document.querySelector('.loader');
+    let content = document.querySelector('.content');
+    let renderDiv = document.getElementById('renderMovie');
+    let deleteBtn = document.getElementsByClassName('delete-btn');
+    console.log(deleteBtn);
+    console.log(deleteBtn[0]);
+    let deleteBtn1 = document.querySelectorAll('.delete-btn');
+    console.log(deleteBtn1);
+    let deleteAllBtn = document.getElementById('delete-all-movie');
+    let addBtn = document.getElementById('add-btn');
+    let editBtn = document.getElementById('edit-btn');
+    let addMovieTitle = document.getElementById('add-movie-title');
 
-const fetchAPIById = (id) => fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${APIKEY}&append_to_response=videos,images`)
-    .then(res => res.json())
-    .catch(err => console.error(err));
+    const movieUrl = 'https://synonymous-evening-millennium.glitch.me/movies';
+    const tmdbUrl = `https://api.themoviedb.org/3/movie/123?api_key=${APIKEY}&append_to_response=videos,images`;
+    const tmdbSearchUrl = `https://api.themoviedb.org/3/search/movie?api_key=${APIKEY}&query=Jack+Reacher`;
 
-fetchAPIById(122).then(data => console.log(data));
+    const fetchAPIById = (id) => fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${APIKEY}&append_to_response=videos,images`)
+        .then(res => res.json())
+        .catch(err => console.error(err));
 
-const fetchAPIByName = (name) => fetch(`https://api.themoviedb.org/3/search/movie?api_key=${APIKEY}&query=${name}`)
-    .then(res => res.json())
-    .catch(err => console.log(err));
+    fetchAPIById(122).then(data => console.log(data));
 
-const getMovies = () => fetch(movieUrl)
-    .then(res => res.json())
-    .catch(err => console.error(err));
+    const fetchAPIByName = (name) => fetch(`https://api.themoviedb.org/3/search/movie?api_key=${APIKEY}&query=${name}`)
+        .then(res => res.json())
+        .catch(err => console.log(err));
 
-getMovies().then(movies => {
-    console.log(movies);
-    movies.forEach(movie => renderMovie(movie));
-    loader.style.display = 'none';
-    content.classList.remove('invisible');
-})
+    const getMovies = () => fetch(movieUrl)
+        .then(res => res.json())
+        .catch(err => console.error(err));
 
-function renderMovies() {
     getMovies().then(movies => {
         console.log(movies);
         movies.forEach(movie => renderMovie(movie));
+        loader.style.display = 'none';
+        content.classList.remove('invisible');
     })
-}
 
-function renderMovie(movie) {
-    let output = `
+    function renderMovies() {
+        getMovies().then(movies => {
+            console.log(movies);
+            movies.forEach(movie => renderMovie(movie));
+        })
+    }
+
+    function renderMovie(movie) {
+        let output = `
                 <div class="card">
                     <div class="card-title">Title: ${movie.title}</div>
                     <div class="card-body">
@@ -59,29 +69,31 @@ function renderMovie(movie) {
                         <button>edit</button>                 
                     </div>
                 </div>`;
-    renderDiv.innerHTML += output;
-}
-
-addBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    e.target.disabled = true;
-    let name = formatString(addMovieTitle.value);
-    if (name === '') {
-        alert('Please put in a valid movie name');
-        e.target.disabled = false;
-    // } else if () {
-
-    } else {
-        fetchAPIByName(name)
-            .then(data => fetchAPIById(data.results[0].id))
-            .then(data => {
-                addMovie(data);
-                renderMovie(data);
-                e.target.disabled = false;
-            });
+        renderDiv.innerHTML += output;
     }
-    addMovieTitle.value = '';
-})
+
+    addBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.target.disabled = true;
+        let name = formatString(addMovieTitle.value);
+        if (name === '') {
+            alert('Please put in a valid movie name');
+            e.target.disabled = false;
+            // } else if () {
+
+        } else {
+            fetchAPIByName(name)
+                .then(data => fetchAPIById(data.results[0].id))
+                .then(data => {
+                    addMovie(data);
+                    renderMovie(data);
+                    e.target.disabled = false;
+                });
+        }
+        addMovieTitle.value = '';
+    })
+
+
 
 // let deleteArr = Array.from(deleteBtn);
 // console.log(deleteArr);
@@ -100,62 +112,63 @@ addBtn.addEventListener('click', (e) => {
 //     console.log(e.currentTarget);
 // })
 
-deleteAllBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    getMovies().then(movies => {
-        movies.map(ele => ele.id).forEach(id => deleteMovie(id));
-    });
-    // getMovies().then(data => console.log(data));
-    // renderMovies();
-    renderDiv.innerHTML = '';
-})
-
-function formatString(str) {
-    return str.split(' ').map(ele => ele.charAt(0).toUpperCase() + ele.slice(1).toLowerCase()).join('+');
-}
-
-const addMovie = movie => fetch(`${movieUrl}`, {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(movie)
-})
-    .then(res => res.json())
-    .then(data => {
-        console.log(`Success: created ${JSON.stringify(data)}`);
-        return data.id;
+    deleteAllBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        getMovies().then(movies => {
+            movies.map(ele => ele.id).forEach(id => deleteMovie(id));
+        });
+        // getMovies().then(data => console.log(data));
+        // renderMovies();
+        renderDiv.innerHTML = '';
     })
-    .catch(console.error);
 
-const editMovie = movie => fetch(`${movieUrl}/${movie.id}`, {
-    method: 'PUT',
-    headers: {
-        'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(movie)
-})
-    .then(res => res.json())
-    .then(data => {
-        console.log(`Success: edited ${JSON.stringify(data)}`);
-    })
-    .catch(console.error);
-
-const deleteMovie = id => fetch(`${movieUrl}/${id}`, {
-    method: 'DELETE',
-    headers: {
-        'Content-Type': 'application/json'
+    function formatString(str) {
+        return str.split(' ').map(ele => ele.charAt(0).toUpperCase() + ele.slice(1).toLowerCase()).join('+');
     }
-})
-    .then(res => res.json())
-    .then(() => {
-        console.log(`Success: deleted movie with id of ${id}`);
+
+    const addMovie = movie => fetch(`${movieUrl}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(movie)
     })
-    .catch(console.error);
+        .then(res => res.json())
+        .then(data => {
+            console.log(`Success: created ${JSON.stringify(data)}`);
+            return data.id;
+        })
+        .catch(console.error);
+
+    const editMovie = movie => fetch(`${movieUrl}/${movie.id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(movie)
+    })
+        .then(res => res.json())
+        .then(data => {
+            console.log(`Success: edited ${JSON.stringify(data)}`);
+        })
+        .catch(console.error);
+
+    const deleteMovie = id => fetch(`${movieUrl}/${id}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(res => res.json())
+        .then(() => {
+            console.log(`Success: deleted movie with id of ${id}`);
+        })
+        .catch(console.error);
 
 
-var stars = document.getElementsByClassName('star');
-for (let i = 0; i < stars.length; i++) {
-    let id = stars[i].getAttribute('data-value');
-    stars[i].addEventListener('click', () => document.getElementById('review-result').innerText = id);
+    var stars = document.getElementsByClassName('star');
+    for (let i = 0; i < stars.length; i++) {
+        let id = stars[i].getAttribute('data-value');
+        stars[i].addEventListener('click', () => document.getElementById('review-result').innerText = id);
+    }
 }
