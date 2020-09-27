@@ -8,15 +8,15 @@
  }
 
 
-/*.loader {*/
-/*    height: 100vh;*/
-/*    font-size: 100px;*/
-/*    background-color: lightgray;*/
-/*    display: flex;*/
-/*    justify-content: center;*/
-/*    align-items: center;*/
-/*    !*opacity: 1;*!*/
-/*}*/
+.loader {
+    height: 100vh;
+    font-size: 100px;
+    color: lightgray;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /*opacity: 1;*/
+}
 
 /*nav {*/
 /*    background-color: #323131;*/
@@ -48,6 +48,10 @@
 
 .invisibleBtn {
     display: none;
+}
+
+.blue-border {
+    border: 1px dotted blue;
 }
 
 .poster {
