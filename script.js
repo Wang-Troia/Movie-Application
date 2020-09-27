@@ -68,7 +68,6 @@ function ready() {
         renderDiv.innerHTML += output;
     }
 
-
     addBtn.addEventListener('click', (e) => {
         e.preventDefault();
         e.target.disabled = true;
@@ -90,8 +89,6 @@ function ready() {
         addMovieTitle.value = '';
     })
 
-
-
     document.querySelector('body').addEventListener('click', function (e) {
         console.log(e.target);
         if (!e.target) {
@@ -105,7 +102,8 @@ function ready() {
 
     $('#editMode').click(function (e){
         console.log(e);
-        $('.card-footer').toggleClass('invisibleBtn')
+        $('.card-footer').toggleClass('invisibleBtn');
+        $('span[contenteditable="true"]').toggleClass('blue-border');
     })
 
     document.querySelector('body').addEventListener('click', function (e) {
@@ -114,24 +112,14 @@ function ready() {
         if (!e.target) {
             return;
         }
-        if (e.target.matches('#editMode')) {
-        }})
-
-
-    document.querySelector('body').addEventListener('click', function (e) {
-        console.log(e.target);
-        console.log(document.activeElement);
-        if (!e.target) {
-            return;
-        }
         if (e.target.matches('.edit-btn')) {
-            obj = {
+            let obj = {
                 id: e.target.getAttribute('data-id'),
-                vote_average: e.target.closest('.card').childNodes[3].childNodes[3].childNodes[1].innerText,
-                title: e.target.closest('.card').childNodes[1].innerText,
-                poster_path: e.target.closest('.card').childNodes[3].childNodes[1].getAttribute('src').slice(32),
-                overview: e.target.closest('.card').childNodes[3].childNodes[7].innerText,
-                genres: [{name: e.target.closest('.card').childNodes[3].childNodes[5].childNodes[1].innerText}]
+                vote_average: e.target.closest('.card').childNodes[1].childNodes[5].childNodes[1].innerText,
+                title: e.target.closest('.card').childNodes[1].childNodes[3].innerText,
+                poster_path: e.target.closest('.card').childNodes[1].childNodes[1].getAttribute('src').slice(32),
+                overview: e.target.closest('.card').childNodes[1].childNodes[9].innerText,
+                genres: [{name: e.target.closest('.card').childNodes[1].childNodes[7].childNodes[1].innerText}]
             };
             editMovie(obj);
         }
