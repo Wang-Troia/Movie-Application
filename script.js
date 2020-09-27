@@ -5,7 +5,9 @@ if (document.readyState === 'loading') {
 }
 
 function ready() {
-
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
     let loader = document.querySelector('.loader');
     let content = document.querySelector('.content');
     let renderDiv = document.getElementById('renderMovie');
@@ -17,6 +19,8 @@ function ready() {
     const movieUrl = 'https://synonymous-evening-millennium.glitch.me/movies';
     const tmdbUrl = `https://api.themoviedb.org/3/movie/123?api_key=${APIKEY}&append_to_response=videos,images`;
     const tmdbSearchUrl = `https://api.themoviedb.org/3/search/movie?api_key=${APIKEY}&query=Jack+Reacher`;
+
+
 
     const fetchAPIById = (id) => fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${APIKEY}&append_to_response=videos,images`)
         .then(res => res.json())
@@ -48,21 +52,22 @@ function ready() {
 
     function renderMovie(movie) {
         let output = `
-                <div class="card col-3 m-3 text-center">
-                    <h2 class="card-title py-3" style="background-color: #262651">${movie.title}</h2>
-                    <div class="card-body">
+                <div class="card col-3 m-3 text-center" >
+                    <div class="card-body add_to_this">
                         <img class="poster" src= "https://image.tmdb.org/t/p/w300/${movie.poster_path}" alt="movie poster">
+                        <div class="card-title" style="background-color: #262651">${movie.title}</div>
                         <div>Rating: <span contenteditable="true">${movie.vote_average}</span></div>
-                        <div>Genres: <span contenteditable="true">${movie.genres.reduce((acc, {name}) => acc += `${name} `, '')}</span></div>
+                        <div>Genres: <span contenteditable="true">${movie.genres.reduce((acc, {name}) => acc += `${name} `, '')}</span></div>      
                         <p class="plot">${movie.overview}</p>
                     </div>
                     <div class="card-footer invisibleBtn">
-                        <button class="delete-btn btn-lg btn-secondary" id="${movie.id}">delete</button>                 
-                        <button class="edit-btn btn-lg btn-secondary" data-id="${movie.id}">edit</button>                 
+                        <button class="delete-btn btn-lg btn-secondary" id="${movie.id}">Delete</button>                 
+                        <button class="edit-btn btn-lg btn-secondary" data-id="${movie.id}">Submit</button>                 
                     </div>
                 </div>`;
         renderDiv.innerHTML += output;
     }
+
 
     addBtn.addEventListener('click', (e) => {
         e.preventDefault();
@@ -84,6 +89,7 @@ function ready() {
         }
         addMovieTitle.value = '';
     })
+
 
 
     document.querySelector('body').addEventListener('click', function (e) {
@@ -119,7 +125,6 @@ function ready() {
             return;
         }
         if (e.target.matches('.edit-btn')) {
-            console.log();
             obj = {
                 id: e.target.getAttribute('data-id'),
                 vote_average: e.target.closest('.card').childNodes[3].childNodes[3].childNodes[1].innerText,

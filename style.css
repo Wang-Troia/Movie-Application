@@ -4,11 +4,9 @@
 
  body {
      background-color: #000000;
+     font-family: Verdana;
  }
 
-/* .invisible {*/
-/*     display: none;*/
-/* }*/
 
 /*.loader {*/
 /*    height: 100vh;*/
@@ -40,7 +38,8 @@
     background-color: #141c30;
     color: #a0a0a0;
     font-size: larger;
-    border: 1px solid #a0a0a0;
+
+    /*max-height: 300px;*/
 }
 
 .card-body {
@@ -51,23 +50,12 @@
     display: none;
 }
 
-.card-footer {
-
+.poster {
+    /*height: 250px;*/
+    width: 95%;
+    justify-self: center;
+    box-shadow: 5px 5px 5px rgba(0,0,0,0.5), -5px -1px 5px rgba(0,0,0,0.5);
 }
-.delete-btn {
-
-}
-/*.poster {*/
-/*    height: 250px;*/
-/*    !*width: 200px;*!*/
-/*    justify-self: center;*/
-/*    box-shadow: 5px 5px 5px rgba(0,0,0,0.5), -5px -1px 5px rgba(0,0,0,0.5);*/
-/*}*/
-
-/*.plot {*/
-/*    overflow-y: auto;*/
-/*    height: 120px;*/
-/*}*/
 
 /*form {*/
 /*    border: 1px solid black;*/
@@ -80,4 +68,38 @@
     padding: 20px;
 }
 
+.plot {
+    display: none;
+    font-size: small;
+}
 
+.add_to_this .plot {
+    display: none;
+    position: absolute;
+    bottom: 5%;
+    left: 5%;
+    right: 5%;
+    background-color: #000000;
+    padding: .5em;
+
+}
+.add_to_this:hover .plot {
+    display: block;
+    position: absolute;
+    bottom: 35%;
+    top: auto;
+
+    animation: fadeInAnimation ease 1s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+
+
+@keyframes fadeInAnimation {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: .7;
+    }
+}
